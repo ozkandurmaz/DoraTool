@@ -86,8 +86,8 @@
             </label>
         </div>
         <div class="rationale">
-            <label for="q1-rationale">Rationale for your answer:</label>
-            <textarea id="q1-rationale" name="q1-rationale"></textarea>
+            <label for="q1-rationale"></label>
+            <textarea id="q1-rationale" name="q1-rationale" placeholder="Please provide rationale for your answer"></textarea>
         </div>
     </div>
 
@@ -104,8 +104,8 @@
             </label>
         </div>
         <div class="rationale">
-            <label for="q2-rationale">Rationale for your answer:</label>
-            <textarea id="q2-rationale" name="q2-rationale"></textarea>
+            <label for="q2-rationale"></label>
+            <textarea id="q2-rationale" name="q2-rationale" placeholder="Please provide rationale for your answer"></textarea>
         </div>
     </div>
 
@@ -128,8 +128,8 @@
                 <input type="radio" name="q3a" value="no" required> No
             </label>
             <div class="rationale">
-                <label for="q3a-rationale">Rationale for your answer:</label>
-                <textarea id="q3a-rationale" name="q3a-rationale"></textarea>
+                <label for="q3a-rationale"></label>
+                <textarea id="q3a-rationale" name="q3a-rationale" placeholder="Please provide rationale for your answer"></textarea>
             </div>
         </div>
         <!-- Repeat rationale sections for 3B, 3C, 3D, 3E, and 3F -->
@@ -143,8 +143,8 @@
                 <input type="radio" name="q3b" value="no" required> No
             </label>
             <div class="rationale">
-                <label for="q3b-rationale">Rationale for your answer:</label>
-                <textarea id="q3b-rationale" name="q3b-rationale"></textarea>
+                <label for="q3b-rationale"></label>
+                <textarea id="q3b-rationale" name="q3b-rationale" placeholder="Please provide rationale for your answer"></textarea>
             </div>
         </div>
         <div>
@@ -157,8 +157,8 @@
                 <input type="radio" name="q3c" value="no" required> No
             </label>
             <div class="rationale">
-                <label for="q3c-rationale">Rationale for your answer:</label>
-                <textarea id="q3c-rationale" name="q3c-rationale"></textarea>
+                <label for="q3c-rationale"></label>
+                <textarea id="q3c-rationale" name="q3c-rationale" placeholder="Please provide rationale for your answer"></textarea>
             </div>
         </div>
         <div>
@@ -171,8 +171,8 @@
                 <input type="radio" name="q3d" value="no" required> No
             </label>
             <div class="rationale">
-                <label for="q3d-rationale">Rationale for your answer:</label>
-                <textarea id="q3d-rationale" name="q3d-rationale"></textarea>
+                <label for="q3d-rationale"></label>
+                <textarea id="q3d-rationale" name="q3d-rationale" placeholder="Please provide rationale for your answer"></textarea>
             </div>
         </div>
         <div>
@@ -185,8 +185,8 @@
                 <input type="radio" name="q3e" value="no" required> No
             </label>
             <div class="rationale">
-                <label for="q3e-rationale">Rationale for your answer:</label>
-                <textarea id="q3e-rationale" name="q3e-rationale"></textarea>
+                <label for="q3e-rationale"></label>
+                <textarea id="q3e-rationale" name="q3e-rationale" placeholder="Please provide rationale for your answer"></textarea>
             </div>
         </div>
         <div>
@@ -199,8 +199,8 @@
                 <input type="radio" name="q3f" value="no" required> No
             </label>
             <div class="rationale">
-                <label for="q3f-rationale">Rationale for your answer:</label>
-                <textarea id="q3f-rationale" name="q3f-rationale"></textarea>
+                <label for="q3f-rationale"></label>
+                <textarea id="q3f-rationale" name="q3f-rationale" placeholder="Please provide rationale for your answer"></textarea>
             </div>
         </div>
     </div>
@@ -220,9 +220,10 @@
                 }
             }
 
-            // Get answers
+            // Get answers and rationale
             const getAnswer = (name) => document.querySelector(`input[name="${name}"]:checked`).value === 'yes';
-            
+            const getRationale = (name) => document.querySelector(`#${name}-rationale`).value;
+
             const q1 = getAnswer('q1');
             const q2 = getAnswer('q2');
             const q3Answers = {
@@ -232,6 +233,15 @@
                 d: getAnswer('q3d'),
                 e: getAnswer('q3e'),
                 f: getAnswer('q3f')
+            };
+
+            const q3Rationales = {
+                a: getRationale('q3a'),
+                b: getRationale('q3b'),
+                c: getRationale('q3c'),
+                d: getRationale('q3d'),
+                e: getRationale('q3e'),
+                f: getRationale('q3f')
             };
 
             // Count positive Q3 answers
@@ -275,13 +285,24 @@
                 </ul>
                 <p><strong>Classification Reason:</strong></p>
                 <ul>
-                    ${!q1 ? '<li>Q1 is negative - automatically classified as non-major</li>' : ''}
+                    ${!q1 ? '<li>Q1 is negative - automatically classified as non-major</li>' : ''} 
                     ${(q1 && q2) ? '<li>Q1 and Q2 are both positive</li>' : ''}
-                    ${(q1 && q3PositiveCount >= 2) ? `<li>${q3PositiveCount} positive answers in Q3 section (2 or more required for major classification)</li>` : ''}
+                    ${(q1 && q3PositiveCount >= 2) ? `<li>${q3PositiveCount} positive answers in Q3 section (2 or more required for major classification)</li>` : ''} 
                     ${(!isMajor && q1) ? '<li>Insufficient criteria met for major classification</li>' : ''}
                 </ul>
+                <h3>Rationales:</h3>
+                <ul>
+                    <li><strong>Q1 Rationale:</strong> ${getRationale('q1')}</li>
+                    <li><strong>Q2 Rationale:</strong> ${getRationale('q2')}</li>
+                    <li><strong>Q3A Rationale:</strong> ${q3Rationales.a}</li>
+                    <li><strong>Q3B Rationale:</strong> ${q3Rationales.b}</li>
+                    <li><strong>Q3C Rationale:</strong> ${q3Rationales.c}</li>
+                    <li><strong>Q3D Rationale:</strong> ${q3Rationales.d}</li>
+                    <li><strong>Q3E Rationale:</strong> ${q3Rationales.e}</li>
+                    <li><strong>Q3F Rationale:</strong> ${q3Rationales.f}</li>
+                </ul>
             `;
-
+            
             resultDiv.className = `result ${isMajor ? 'major' : 'minor'}`;
             resultDiv.innerHTML = resultHTML;
         }
