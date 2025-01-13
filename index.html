@@ -87,7 +87,7 @@
         </div>
         <div class="rationale">
             <label for="q1-rationale">Rationale for your answer:</label>
-            <textarea id="q1-rationale" name="q1-rationale" placeholder="Please provide rationale for your answer"></textarea>
+            <textarea id="q1-rationale" name="q1-rationale"></textarea>
         </div>
     </div>
 
@@ -105,14 +105,14 @@
         </div>
         <div class="rationale">
             <label for="q2-rationale">Rationale for your answer:</label>
-            <textarea id="q2-rationale" name="q2-rationale" placeholder="Please provide rationale for your answer"></textarea>
+            <textarea id="q2-rationale" name="q2-rationale"></textarea>
         </div>
     </div>
 
     <div class="question-group">
         <h3>Additional Impact Assessment Questions</h3>
         <div>
-            <h3>Question 3A: Affected Clients, financial counterparts and transactions</h3>
+            <h3>Question 3A: Affected Clients, financial counterparts, and transactions</h3>
             <p>Does the incident meet any of the following conditions?
                 <br>a) the number of affected clients is higher than 10% of all clients using the affected service; or
                 <br>b) the number of affected clients is higher than 100,000 clients using the affected service; or
@@ -129,12 +129,12 @@
             </label>
             <div class="rationale">
                 <label for="q3a-rationale">Rationale for your answer:</label>
-                <textarea id="q3a-rationale" name="q3a-rationale" placeholder="Please provide rationale for your answer"></textarea>
+                <textarea id="q3a-rationale" name="q3a-rationale"></textarea>
             </div>
         </div>
+        <!-- Repeat rationale sections for 3B, 3C, 3D, 3E, and 3F -->
         <div>
             <h3>Question 3B: Data losses</h3>
-            <p>Does the incident have any impact on the availability, authenticity, integrity or confidentiality of data, which has or will have an adverse impact on the implementation of the business objectives of the Financial Entity or on meeting regulatory requirements?</p>
             <label>
                 <input type="radio" name="q3b" value="yes" required> Yes
             </label>
@@ -144,10 +144,9 @@
             </label>
             <div class="rationale">
                 <label for="q3b-rationale">Rationale for your answer:</label>
-                <textarea id="q3b-rationale" name="q3b-rationale" placeholder="Please provide rationale for your answer"></textarea>
+                <textarea id="q3b-rationale" name="q3b-rationale"></textarea>
             </div>
         </div>
-        <!-- Repeat rationale sections for 3C, 3D, 3E, and 3F -->
         <div>
             <h3>Question 3C: Reputational impact</h3>
             <label>
@@ -159,10 +158,9 @@
             </label>
             <div class="rationale">
                 <label for="q3c-rationale">Rationale for your answer:</label>
-                <textarea id="q3c-rationale" name="q3c-rationale" placeholder="Please provide rationale for your answer"></textarea>
+                <textarea id="q3c-rationale" name="q3c-rationale"></textarea>
             </div>
         </div>
-        <!-- Remaining questions (3D, 3E, 3F) follow the same structure -->
         <div>
             <h3>Question 3D: Duration and Service Downtime</h3>
             <label>
@@ -174,7 +172,7 @@
             </label>
             <div class="rationale">
                 <label for="q3d-rationale">Rationale for your answer:</label>
-                <textarea id="q3d-rationale" name="q3d-rationale" placeholder="Please provide rationale for your answer"></textarea>
+                <textarea id="q3d-rationale" name="q3d-rationale"></textarea>
             </div>
         </div>
         <div>
@@ -188,7 +186,7 @@
             </label>
             <div class="rationale">
                 <label for="q3e-rationale">Rationale for your answer:</label>
-                <textarea id="q3e-rationale" name="q3e-rationale" placeholder="Please provide rationale for your answer"></textarea>
+                <textarea id="q3e-rationale" name="q3e-rationale"></textarea>
             </div>
         </div>
         <div>
@@ -202,7 +200,7 @@
             </label>
             <div class="rationale">
                 <label for="q3f-rationale">Rationale for your answer:</label>
-                <textarea id="q3f-rationale" name="q3f-rationale" placeholder="Please provide rationale for your answer"></textarea>
+                <textarea id="q3f-rationale" name="q3f-rationale"></textarea>
             </div>
         </div>
     </div>
@@ -212,81 +210,81 @@
     <div id="result" class="result"></div>
 
     <script>
-    function classifyIncident() {
-        // Check if all questions are answered
-        const allQuestions = ['q1', 'q2', 'q3a', 'q3b', 'q3c', 'q3d', 'q3e', 'q3f'];
-        for (let q of allQuestions) {
-            if (!document.querySelector(`input[name="${q}"]:checked`)) {
-                alert('Please answer all questions before classification.');
-                return;
+        function classifyIncident() {
+            // Check if all questions are answered
+            const allQuestions = ['q1', 'q2', 'q3a', 'q3b', 'q3c', 'q3d', 'q3e', 'q3f'];
+            for (let q of allQuestions) {
+                if (!document.querySelector(`input[name="${q}"]:checked`)) {
+                    alert('Please answer all questions before classification.');
+                    return;
+                }
             }
+
+            // Get answers
+            const getAnswer = (name) => document.querySelector(`input[name="${name}"]:checked`).value === 'yes';
+            
+            const q1 = getAnswer('q1');
+            const q2 = getAnswer('q2');
+            const q3Answers = {
+                a: getAnswer('q3a'),
+                b: getAnswer('q3b'),
+                c: getAnswer('q3c'),
+                d: getAnswer('q3d'),
+                e: getAnswer('q3e'),
+                f: getAnswer('q3f')
+            };
+
+            // Count positive Q3 answers
+            const q3PositiveCount = Object.values(q3Answers).filter(v => v).length;
+
+            // Determine classification - if Q1 is no, always non-major regardless of other answers
+            const isMajor = q1 && ((q1 && q2) || q3PositiveCount >= 2);
+
+            // Generate result
+            const resultDiv = document.getElementById('result');
+            resultDiv.style.display = 'block';
+            
+            let resultHTML = `
+                <h3>${isMajor ? 'MAJOR' : 'NON-MAJOR'} Incident</h3>
+                <p>Classification based on the following answers:</p>
+                <ul class="answer-list">
+                    <li class="${q1 ? 'positive' : 'negative'}">
+                        Q1 - Critical functions/services affected: ${q1 ? 'YES' : 'NO'}
+                    </li>
+                    <li class="${q2 ? 'positive' : 'negative'}">
+                        Q2 - Unauthorized access identified: ${q2 ? 'YES' : 'NO'}
+                    </li>
+                    <li class="${q3Answers.a ? 'positive' : 'negative'}">
+                        Q3A - Client/transaction impact: ${q3Answers.a ? 'YES' : 'NO'}
+                    </li>
+                    <li class="${q3Answers.b ? 'positive' : 'negative'}">
+                        Q3B - Data impact: ${q3Answers.b ? 'YES' : 'NO'}
+                    </li>
+                    <li class="${q3Answers.c ? 'positive' : 'negative'}">
+                        Q3C - Reputational impact: ${q3Answers.c ? 'YES' : 'NO'}
+                    </li>
+                    <li class="${q3Answers.d ? 'positive' : 'negative'}">
+                        Q3D - Duration/downtime impact: ${q3Answers.d ? 'YES' : 'NO'}
+                    </li>
+                    <li class="${q3Answers.e ? 'positive' : 'negative'}">
+                        Q3E - Geographical impact: ${q3Answers.e ? 'YES' : 'NO'}
+                    </li>
+                    <li class="${q3Answers.f ? 'positive' : 'negative'}">
+                        Q3F - Economic impact: ${q3Answers.f ? 'YES' : 'NO'}
+                    </li>
+                </ul>
+                <p><strong>Classification Reason:</strong></p>
+                <ul>
+                    ${!q1 ? '<li>Q1 is negative - automatically classified as non-major</li>' : ''}
+                    ${(q1 && q2) ? '<li>Q1 and Q2 are both positive</li>' : ''}
+                    ${(q1 && q3PositiveCount >= 2) ? `<li>${q3PositiveCount} positive answers in Q3 section (2 or more required for major classification)</li>` : ''}
+                    ${(!isMajor && q1) ? '<li>Insufficient criteria met for major classification</li>' : ''}
+                </ul>
+            `;
+
+            resultDiv.className = `result ${isMajor ? 'major' : 'minor'}`;
+            resultDiv.innerHTML = resultHTML;
         }
-
-        // Get answers
-        const getAnswer = (name) => document.querySelector(`input[name="${name}"]:checked`).value === 'yes';
-        
-        const q1 = getAnswer('q1');
-        const q2 = getAnswer('q2');
-        const q3Answers = {
-            a: getAnswer('q3a'),
-            b: getAnswer('q3b'),
-            c: getAnswer('q3c'),
-            d: getAnswer('q3d'),
-            e: getAnswer('q3e'),
-            f: getAnswer('q3f')
-        };
-
-        // Count positive Q3 answers
-        const q3PositiveCount = Object.values(q3Answers).filter(v => v).length;
-
-        // Determine classification - if Q1 is no, always non-major regardless of other answers
-        const isMajor = q1 && ((q1 && q2) || q3PositiveCount >= 2);
-
-        // Generate result
-        const resultDiv = document.getElementById('result');
-        resultDiv.style.display = 'block';
-        
-        let resultHTML = `
-            <h3>${isMajor ? 'MAJOR' : 'NON-MAJOR'} Incident</h3>
-            <p>Classification based on the following answers:</p>
-            <ul class="answer-list">
-                <li class="${q1 ? 'positive' : 'negative'}">
-                    Q1 - Critical functions/services affected: ${q1 ? 'YES' : 'NO'}
-                </li>
-                <li class="${q2 ? 'positive' : 'negative'}">
-                    Q2 - Unauthorized access identified: ${q2 ? 'YES' : 'NO'}
-                </li>
-                <li class="${q3Answers.a ? 'positive' : 'negative'}">
-                    Q3A - Client/transaction impact: ${q3Answers.a ? 'YES' : 'NO'}
-                </li>
-                <li class="${q3Answers.b ? 'positive' : 'negative'}">
-                    Q3B - Data impact: ${q3Answers.b ? 'YES' : 'NO'}
-                </li>
-                <li class="${q3Answers.c ? 'positive' : 'negative'}">
-                    Q3C - Reputational impact: ${q3Answers.c ? 'YES' : 'NO'}
-                </li>
-                <li class="${q3Answers.d ? 'positive' : 'negative'}">
-                    Q3D - Duration/downtime impact: ${q3Answers.d ? 'YES' : 'NO'}
-                </li>
-                <li class="${q3Answers.e ? 'positive' : 'negative'}">
-                    Q3E - Geographical impact: ${q3Answers.e ? 'YES' : 'NO'}
-                </li>
-                <li class="${q3Answers.f ? 'positive' : 'negative'}">
-                    Q3F - Economic impact: ${q3Answers.f ? 'YES' : 'NO'}
-                </li>
-            </ul>
-            <p><strong>Classification Reason:</strong></p>
-            <ul>
-                ${!q1 ? '<li>Q1 is negative - automatically classified as non-major</li>' : ''}
-                ${(q1 && q2) ? '<li>Q1 and Q2 are both positive</li>' : ''}
-                ${(q1 && q3PositiveCount >= 2) ? `<li>${q3PositiveCount} positive answers in Q3 section (2 or more required for major classification)</li>` : ''}
-                ${(!isMajor && q1) ? '<li>Insufficient criteria met for major classification</li>' : ''}
-            </ul>
-        `;
-
-        resultDiv.className = `result ${isMajor ? 'major' : 'minor'}`;
-        resultDiv.innerHTML = resultHTML;
-    }
-</script>
+    </script>
 </body>
 </html>
