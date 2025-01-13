@@ -220,8 +220,12 @@
                 }
             }
 
-            // Get answers
-            const getAnswer = (name) => document.querySelector(`input[name="${name}"]:checked`).value === 'yes';
+            // Get answers and rationales
+            // Get answers and rationales
+            const getAnswer = (name) => ({
+                value: document.querySelector(`input[name="${name}"]:checked`).value === 'yes',
+                rationale: document.querySelector(`textarea[name="${name}-rationale"]`).value
+            });
             
             const q1 = getAnswer('q1');
             const q2 = getAnswer('q2');
