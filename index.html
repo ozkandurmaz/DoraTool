@@ -74,7 +74,7 @@
             <label>
                 <input type="radio" name="q1" value="no" required> No - this means the incident is not a major incident and this does not require reporting to the competent authorities. You can stop with this questionnaire.
             </label>
-            
+              <textarea class="rationale" name="q1-rationale" placeholder="Please provide rationale for your answer"></textarea>
         </div>
     </div>
 
@@ -238,6 +238,7 @@
                 <ul class="answer-list">
                     <li class="${q1 ? 'positive' : 'negative'}">
                         Q1 - Critical functions/services affected: ${q1 ? 'YES' : 'NO'}
+			<br><strong>Rationale:</strong> ${q1.rationale || 'No rationale provided'}
                     </li>
                     <li class="${q2 ? 'positive' : 'negative'}">
                         Q2 - Unauthorized access identified: ${q2 ? 'YES' : 'NO'}
