@@ -325,7 +325,7 @@
             resultDiv.style.display = 'block';
             
             let resultHTML = `
-                <h3>${isMajor ? 'MAJOR' : 'NON-MAJOR'} Incident</h3>
+                <h3>${isMajor ? 'This incident is classified as a MAJOR incident and should be reported to the competent authorities.' : 'NON-MAJOR: This incident is not classified as a major incident and does not need to be reported.'} </h3>
                 <p>Classification based on the following answers:</p>
                 <ul class="answer-list">
                     <li class="${q1 ? 'positive' : 'negative'}">
